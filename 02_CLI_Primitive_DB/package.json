@@ -1,0 +1,17 @@
+{
+  "name": "02_CLI_Primitive_DB",
+  "version": "1.0.0",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "start": "tsc && node dist/main.js"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^20.11.19"
+  },
+  "dependencies": {
+    "inquirer": "^8.2.6"
+  }
+}
