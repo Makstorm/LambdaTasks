@@ -3,8 +3,7 @@ import { setupBotListeners } from "./utils";
 import { program } from "commander";
 
 export const App = async () => {
-  const token = "6954166288:AAEYiUIf1bWOj810VOamdIPimLdochakmQU";
-  const bot = new TelegramBot(token, { polling: true });
+  const bot = new TelegramBot(process.env.TOKEN, { polling: true });
   const userIds = setupBotListeners(bot);
 
   program
@@ -20,7 +19,7 @@ export const App = async () => {
     .description("Send message via tg bot")
     .argument("<string>", "message string")
     .action(async (str) => {
-      await bot.sendMessage(5726200132, str);
+      await bot.sendMessage(process.env.USER_ID, str);
       process.exit();
     });
 
