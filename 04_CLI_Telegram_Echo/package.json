@@ -1,0 +1,16 @@
+{
+  "name": "04_CLI_Telegram_Echo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^20.11.20",
+    "@types/node-telegram-bot-api": "^0.64.2",
+    "axios": "^1.6.7",
+    "dotenv": "^16.4.5",
+    "node-telegram-bot-api": "^0.64.0"
+  }
+}
