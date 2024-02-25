@@ -22,6 +22,17 @@ export const setupBotListeners = (bot: TelegramBot) => {
     string,
     (msg: TelegramBot.Message) => Promise<void>
   > = {
+    default: async (msg) => {
+      const chatId = msg.chat.id;
+      bot.sendMessage(chatId, "Вітаю, оберіть необхідний функціонал:", {
+        reply_markup: {
+          keyboard: [[{ text: "Курс валют" }, { text: "Прогноз погоди" }]],
+          one_time_keyboard: true,
+          resize_keyboard: true,
+        },
+      });
+    },
+
     awaiting_start: async (msg) => {
       const chatId = msg.chat.id;
       setUserState(chatId, { state: "awaiting_option" });
@@ -49,7 +60,7 @@ export const setupBotListeners = (bot: TelegramBot) => {
       const option = userState.option || 3;
 
       bot.sendMessage(chatId, await getWeatherForecast(city, option));
-      setUserState(chatId, { state: "start" });
+      setUserState(chatId, { state: "default" });
     },
   };
 
