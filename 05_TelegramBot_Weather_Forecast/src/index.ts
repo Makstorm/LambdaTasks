@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 
 const bot = App();
 
-app.post(`/bot${process.env.TELEGRAM_BOT_KEY}`, (req, res) => {
+app.post("/webhook", (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });

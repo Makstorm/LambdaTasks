@@ -1,8 +1,4 @@
-import {
-  ForecastEntry,
-  WeatherLocationApiResponse,
-  WeatherForecast,
-} from "../models";
+import { ForecastEntry, WeatherForecast } from "../models";
 import axios from "axios";
 
 export const getWeatherForecast = async (city: string, step: number) => {

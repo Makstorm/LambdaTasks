@@ -1,9 +1,5 @@
-import TelegramBot, {
-  ReplyKeyboardMarkup,
-  SendMessageOptions,
-} from "node-telegram-bot-api";
-import axios from "axios";
-import { WeatherLocationApiResponse, WeatherForecast } from "../models";
+import TelegramBot from "node-telegram-bot-api";
+
 import { getWeatherForecast } from "./weather-api";
 
 interface UserState {
