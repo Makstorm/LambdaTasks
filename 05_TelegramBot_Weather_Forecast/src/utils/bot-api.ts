@@ -77,6 +77,19 @@ export const setupBotListeners = (bot: TelegramBot) => {
     });
   });
 
+  bot.onText(/\/start/, async (msg) => {
+    const chatId = msg.chat.id;
+    setUserState(chatId, { state: "default" });
+    // bot.sendMessage(chatId, "Давайте почнемо:", {
+    //   reply_markup: {
+    //     keyboard: [[{ text: "Start!!!" }]],
+    //     one_time_keyboard: true,
+    //     remove_keyboard: true,
+    //     resize_keyboard: true,
+    //   },
+    // });
+  });
+
   bot.on("message", async (msg) => {
     if (!msg.text) return;
 
