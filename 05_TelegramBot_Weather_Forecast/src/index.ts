@@ -23,6 +23,10 @@ app.post("/webhook", (req, res) => {
   res.sendStatus(200);
 });
 
+app.get("/ping", (req, res) => {
+  res.sendStatus(200);
+});
+
 const PORT = process.env.PORT || 8000;
 
 const start = async (): Promise<void> => {
