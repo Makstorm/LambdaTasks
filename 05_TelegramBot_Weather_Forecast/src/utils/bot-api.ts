@@ -112,6 +112,17 @@ export const setupBotListeners = (bot: TelegramBot) => {
     const chatId = msg.chat.id;
     const text = msg.text || "";
 
+    if (!msg.text) return;
+    const userState = getUserState(msg.chat.id);
+    if (userState.state) {
+      const handler = stateHandlers[userState.state];
+      if (handler) {
+        await handler(msg);
+        bot.sendMessage(chatId, "Choose opton...", mainMenuKeyboard);
+        return;
+      }
+    }
+
     switch (text) {
       case "/Погода":
         break;
