@@ -40,28 +40,28 @@ export const setupBotListeners = (bot: TelegramBot) => {
     },
   };
 
-  bot.on("message", async (msg) => {
-    if (!msg.text) return;
-    const userState = getUserState(msg.chat.id);
-    if (userState.state) {
-      const handler = stateHandlers[userState.state];
-      if (handler) {
-        await handler(msg);
-        return;
-      }
-    }
-    if (msg.text.startsWith("/")) {
-      const command = msg.text.split(" ")[0];
-      switch (command) {
-        case "/start":
-        case "/weather":
-          break;
-        default:
-          bot.sendMessage(msg.chat.id, "Please use a valid command.");
-          break;
-      }
-    }
-  });
+  // bot.on("message", async (msg) => {
+  //   if (!msg.text) return;
+  //   const userState = getUserState(msg.chat.id);
+  //   if (userState.state) {
+  //     const handler = stateHandlers[userState.state];
+  //     if (handler) {
+  //       await handler(msg);
+  //       return;
+  //     }
+  //   }
+  //   if (msg.text.startsWith("/")) {
+  //     const command = msg.text.split(" ")[0];
+  //     switch (command) {
+  //       case "/start":
+  //       case "/weather":
+  //         break;
+  //       default:
+  //         bot.sendMessage(msg.chat.id, "Please use a valid command.");
+  //         break;
+  //     }
+  //   }
+  // });
 
   const mainMenuKeyboard = {
     reply_markup: {
@@ -130,11 +130,11 @@ export const setupBotListeners = (bot: TelegramBot) => {
       case "Кожні 6 годин":
         await stateHandlers["awaiting_option"](msg, 6);
         break;
-      case "Back to Menu":
+      case "Попереднє меню":
         bot.sendMessage(chatId, "Main Menu", mainMenuKeyboard);
         break;
       default:
-        bot.sendMessage(
+        bot.(
           chatId,
           "Please use a valid command.",
           mainMenuKeyboard
