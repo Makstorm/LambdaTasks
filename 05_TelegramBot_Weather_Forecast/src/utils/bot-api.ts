@@ -42,6 +42,10 @@ export const setupBotListeners = (bot: TelegramBot) => {
       } else if (msg.text.trim() === "Прогноз погоди") {
         await stateHandlers["weaher_start"](msg);
       } else {
+        bot.sendMessage(
+          chatId,
+          "Нажаль, такої опції, я поки не підтримую оберіть із представлених на кнопках: "
+        );
         await stateHandlers["start"](msg);
       }
     },
@@ -67,6 +71,7 @@ export const setupBotListeners = (bot: TelegramBot) => {
         `Ви обрали інтервал в ${option} год. Тепер, будь ласка введіть назву міста, прогноз в якому ви бажаєте отримати:`
       );
     },
+
     awaiting_city: async (msg) => {
       const chatId = msg.chat.id;
       const city = msg.text || "";
