@@ -74,7 +74,8 @@ export const setupBotListeners = (bot: TelegramBot) => {
       const option = userState.option || 3;
 
       bot.sendMessage(chatId, await getWeatherForecast(city, option));
-      setUserState(chatId, { state: "default" });
+      setUserState(chatId, { state: "start" });
+      await stateHandlers["start"](msg);
     },
   };
 
@@ -92,14 +93,7 @@ export const setupBotListeners = (bot: TelegramBot) => {
 
   bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
-    setUserState(chatId, { state: "fork" });
-    bot.sendMessage(chatId, "Вітаю, оберіть необхідний функціонал:", {
-      reply_markup: {
-        keyboard: [[{ text: "Курс валют" }, { text: "Прогноз погоди" }]],
-        one_time_keyboard: true,
-        resize_keyboard: true,
-      },
-    });
+    await stateHandlers["start"](msg);
   });
 
   bot.on("message", async (msg) => {
