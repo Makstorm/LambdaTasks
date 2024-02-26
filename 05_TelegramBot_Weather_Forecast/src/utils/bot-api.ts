@@ -96,17 +96,17 @@ export const setupBotListeners = (bot: TelegramBot) => {
 
   bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, "Main Menu", mainMenuKeyboard);
+    bot.sendMessage(chatId, "Меню", mainMenuKeyboard);
   });
 
   bot.onText(/\/Погода/, (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, "Main Menu", weatherForecastOptions);
+    bot.sendMessage(chatId, "Меню", weatherForecastOptions);
   });
 
   bot.onText(/\/Курс валют/, (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, "Main Menu", currencyOptions);
+    bot.sendMessage(chatId, "Меню", currencyOptions);
   });
 
   bot.on("message", async (msg) => {
@@ -119,12 +119,14 @@ export const setupBotListeners = (bot: TelegramBot) => {
       const handler = stateHandlers[userState.state];
       if (handler) {
         await handler(msg);
-        bot.sendMessage(chatId, "Choose opton...", mainMenuKeyboard);
+        bot.sendMessage(chatId, "Оберіть опцію...", mainMenuKeyboard);
         return;
       }
     }
 
     switch (text) {
+      case "/Start":
+        break;
       case "/Погода":
         break;
       case "/Курс валют":
@@ -146,12 +148,12 @@ export const setupBotListeners = (bot: TelegramBot) => {
         await stateHandlers["awaiting_option"](msg, 6);
         break;
       case "Попереднє меню":
-        bot.sendMessage(chatId, "Main Menu", mainMenuKeyboard);
+        bot.sendMessage(chatId, "Меню", mainMenuKeyboard);
         break;
       default:
         bot.sendMessage(
           chatId,
-          "Please use a valid command.",
+          "Будь ласка введіть валідні команди.",
           mainMenuKeyboard
         );
         break;
