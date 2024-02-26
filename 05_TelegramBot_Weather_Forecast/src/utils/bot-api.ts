@@ -1,11 +1,20 @@
-import TelegramBot from "node-telegram-bot-api";
+import TelegramBot, { ReplyKeyboardMarkup } from "node-telegram-bot-api";
 
 import { getWeatherForecast } from "./weather-api";
 import { start } from "repl";
+import { text } from "body-parser";
 
 interface UserState {
   state: string;
   option?: number;
+}
+
+interface CustomKeyboard extends ReplyKeyboardMarkup {
+  reply_markup: {
+    keyboard: string[][];
+    resize_keyboard: boolean;
+    one_time_keyboard: boolean;
+  };
 }
 
 export const setupBotListeners = (bot: TelegramBot) => {
@@ -105,67 +114,68 @@ export const setupBotListeners = (bot: TelegramBot) => {
   // });
 
   const mainMenuKeyboard = {
-    inline_keyboard: [
-      [{ text: "Feature 1", callback_data: "feature1" }],
-      [{ text: "Feature 2", callback_data: "feature2" }],
-    ],
+    reply_markup: {
+      keyboard: [[{ text: "Feature 1" }, { text: "Feature 2" }]],
+      resize_keyboard: true,
+      one_time_keyboard: true,
+    },
   };
 
-  // Define the feature 1 keyboard
   const feature1Keyboard = {
-    inline_keyboard: [
-      [{ text: "Option 1", callback_data: "option1" }],
-      [{ text: "Option 2", callback_data: "option2" }],
-      [{ text: "Back to Main Menu", callback_data: "main_menu" }],
-    ],
+    reply_markup: {
+      keyboard: [
+        [{ text: "Option 1 - F2" }, { text: "Option 2 - F2" }],
+        [{ text: "Back to Menu" }],
+      ],
+      resize_keyboard: true,
+      one_time_keyboard: true,
+    },
   };
 
-  // Define the feature 2 keyboard
   const feature2Keyboard = {
-    inline_keyboard: [
-      [{ text: "Option 1", callback_data: "option1" }],
-      [{ text: "Option 2", callback_data: "option2" }],
-      [{ text: "Back to Main Menu", callback_data: "main_menu" }],
-    ],
+    reply_markup: {
+      keyboard: [
+        [{ text: "Option 1 - F2" }, { text: "Option 2 - F2" }],
+        [{ text: "Back to Menu" }],
+      ],
+      resize_keyboard: true,
+      one_time_keyboard: true,
+    },
   };
 
-  // Handle inline keyboard button presses
-  bot.on("callback_query", (query) => {
-    const chatId = query.message.chat.id;
-    const messageId = query.message.message_id;
-    const data = query.data;
-
-    switch (data) {
-      case "main_menu":
-        bot.editMessageReplyMarkup(mainMenuKeyboard, {
-          chat_id: chatId,
-          message_id: messageId,
-        });
-        break;
-      case "feature1":
-        bot.editMessageReplyMarkup(feature1Keyboard, {
-          chat_id: chatId,
-          message_id: messageId,
-        });
-        break;
-      case "feature2":
-        bot.editMessageReplyMarkup(feature2Keyboard, {
-          chat_id: chatId,
-          message_id: messageId,
-        });
-        break;
-      case "option1":
-        bot.sendMessage(chatId, "You selected Option 1");
-        break;
-      case "option2":
-        bot.sendMessage(chatId, "You selected Option 2");
-        break;
-    }
-  });
-
-  // Start the bot
   bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, "Main Menu", { reply_markup: mainMenuKeyboard });
+    bot.sendMessage(chatId, "Main Menu", mainMenuKeyboard);
+  });
+
+  bot.on("message", (msg) => {
+    const chatId = msg.chat.id;
+    const text = msg.text || "";
+
+    switch (text) {
+      case "Feature 1":
+        bot.sendMessage(chatId, "Feature 1 Options", feature1Keyboard);
+        break;
+      case "Feature 2":
+        bot.sendMessage(chatId, "Feature 2 Options", feature2Keyboard);
+        break;
+      case "Option 1 - F1":
+      case "Option 1 - F2":
+      case "Option 2 - F1":
+      case "Option 2 - F2":
+        bot.sendMessage(chatId, `You selected ${text}`);
+        break;
+      case "Back to Menu":
+        bot.sendMessage(chatId, "Main Menu", mainMenuKeyboard);
+        break;
+      default:
+        // Handling unknown command or navigating back to the main menu
+        bot.sendMessage(
+          chatId,
+          "Please use a valid command.",
+          mainMenuKeyboard
+        );
+        break;
+    }
   });
 };
