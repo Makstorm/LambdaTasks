@@ -134,7 +134,7 @@ export const setupBotListeners = (bot: TelegramBot) => {
         bot.sendMessage(chatId, "Main Menu", mainMenuKeyboard);
         break;
       default:
-        bot.(
+        bot.sendMessage(
           chatId,
           "Please use a valid command.",
           mainMenuKeyboard
