@@ -3,6 +3,7 @@ import TelegramBot, { ReplyKeyboardMarkup } from "node-telegram-bot-api";
 import { getWeatherForecast } from "./weather-api";
 import { start } from "repl";
 import { text } from "body-parser";
+import { getCurrency } from "./currency-api";
 
 interface UserState {
   state: string;
@@ -127,11 +128,14 @@ export const setupBotListeners = (bot: TelegramBot) => {
       case "/Погода":
         break;
       case "/Курс валют":
+        bot.sendMessage(chatId, "Оберіть валюту", currencyOptions);
         break;
       case "USD": {
+        bot.sendMessage(chatId, await getCurrency(msg.text), mainMenuKeyboard);
         break;
       }
       case "EUR": {
+        bot.sendMessage(chatId, await getCurrency(msg.text), mainMenuKeyboard);
         break;
       }
 
