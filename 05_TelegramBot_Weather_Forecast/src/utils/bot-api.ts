@@ -105,50 +105,54 @@ export const setupBotListeners = (bot: TelegramBot) => {
   // });
 
   const mainMenuKeyboard = {
-    reply_markup: {
-      inline_keyboard: [
-        [{ text: "Feature 1", callback_data: "feature1" }],
-        [{ text: "Feature 2", callback_data: "feature2" }],
-      ],
-    },
+    inline_keyboard: [
+      [{ text: "Feature 1", callback_data: "feature1" }],
+      [{ text: "Feature 2", callback_data: "feature2" }],
+    ],
   };
 
   // Define the feature 1 keyboard
   const feature1Keyboard = {
-    reply_markup: {
-      inline_keyboard: [
-        [{ text: "Option 1", callback_data: "option1" }],
-        [{ text: "Option 2", callback_data: "option2" }],
-        [{ text: "Back to Main Menu", callback_data: "main_menu" }],
-      ],
-    },
+    inline_keyboard: [
+      [{ text: "Option 1", callback_data: "option1" }],
+      [{ text: "Option 2", callback_data: "option2" }],
+      [{ text: "Back to Main Menu", callback_data: "main_menu" }],
+    ],
   };
 
   // Define the feature 2 keyboard
   const feature2Keyboard = {
-    reply_markup: {
-      inline_keyboard: [
-        [{ text: "Option 1", callback_data: "option1" }],
-        [{ text: "Option 2", callback_data: "option2" }],
-        [{ text: "Back to Main Menu", callback_data: "main_menu" }],
-      ],
-    },
+    inline_keyboard: [
+      [{ text: "Option 1", callback_data: "option1" }],
+      [{ text: "Option 2", callback_data: "option2" }],
+      [{ text: "Back to Main Menu", callback_data: "main_menu" }],
+    ],
   };
 
   // Handle inline keyboard button presses
   bot.on("callback_query", (query) => {
     const chatId = query.message.chat.id;
+    const messageId = query.message.message_id;
     const data = query.data;
 
     switch (data) {
       case "main_menu":
-        bot.sendMessage(chatId, "Main Menu", mainMenuKeyboard);
+        bot.editMessageReplyMarkup(mainMenuKeyboard, {
+          chat_id: chatId,
+          message_id: messageId,
+        });
         break;
       case "feature1":
-        bot.sendMessage(chatId, "Feature 1", feature1Keyboard);
+        bot.editMessageReplyMarkup(feature1Keyboard, {
+          chat_id: chatId,
+          message_id: messageId,
+        });
         break;
       case "feature2":
-        bot.sendMessage(chatId, "Feature 2", feature2Keyboard);
+        bot.editMessageReplyMarkup(feature2Keyboard, {
+          chat_id: chatId,
+          message_id: messageId,
+        });
         break;
       case "option1":
         bot.sendMessage(chatId, "You selected Option 1");
@@ -162,6 +166,6 @@ export const setupBotListeners = (bot: TelegramBot) => {
   // Start the bot
   bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, "Main Menu", mainMenuKeyboard);
+    bot.sendMessage(chatId, "Main Menu", { reply_markup: mainMenuKeyboard });
   });
 };
