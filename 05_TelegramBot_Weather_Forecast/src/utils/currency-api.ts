@@ -46,6 +46,6 @@ export const getCurrency = async (currency: string) => {
   const privatbankCurrency = await fetchDataFromPrivatbank(currency);
 
   return `Курс UAH відносно ${currency}:
-            Monobank: купівля - ${monobankCurrency.rateBuy}, продаж - ${monobankCurrency.rateSell}
-            Privatbank: купівля - ${privatbankCurrency.sale}, продаж - ${privatbankCurrency.buy}`;
+          Monobank: купівля - ${monobankCurrency.rateBuy}, продаж - ${monobankCurrency.rateSell}
+          Privatbank: купівля - ${privatbankCurrency.sale}, продаж - ${privatbankCurrency.buy}`;
 };
