@@ -85,19 +85,10 @@ export const setupBotListeners = (bot: TelegramBot) => {
   };
 
   bot.onText(/\/weather/, async (msg) => {
-    const chatId = msg.chat.id;
-    setUserState(chatId, { state: "awaiting_option" });
-    bot.sendMessage(chatId, "Виберіть інтервал для відображення прогнозу:", {
-      reply_markup: {
-        keyboard: [[{ text: "3" }, { text: "6" }]],
-        one_time_keyboard: true,
-        resize_keyboard: true,
-      },
-    });
+    await stateHandlers["weaher_start"](msg);
   });
 
   bot.onText(/\/start/, async (msg) => {
-    const chatId = msg.chat.id;
     await stateHandlers["start"](msg);
   });
 
