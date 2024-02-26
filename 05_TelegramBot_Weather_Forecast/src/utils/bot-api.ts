@@ -111,19 +111,10 @@ export const setupBotListeners = (bot: TelegramBot) => {
     if (msg.text.startsWith("/")) {
       const command = msg.text.split(" ")[0];
       switch (command) {
+        case "/start":
         case "/weather":
           break;
-        default:
-          bot.sendMessage(msg.chat.id, "Please use a valid command.");
-          break;
-      }
-    } else if (getUserState(msg.chat.id).state === "default") {
-      const command = msg.text;
-      switch (command) {
-        case "Прогноз погоди":
-          break;
-        case "Курс валют":
-          break;
+
         default:
           bot.sendMessage(msg.chat.id, "Please use a valid command.");
           break;
