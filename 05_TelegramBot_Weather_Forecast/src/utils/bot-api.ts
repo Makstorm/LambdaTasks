@@ -1,8 +1,5 @@
-import TelegramBot, { ReplyKeyboardMarkup } from "node-telegram-bot-api";
-
+import TelegramBot from "node-telegram-bot-api";
 import { getWeatherForecast } from "./weather-api";
-import { start } from "repl";
-import { text } from "body-parser";
 import { getCurrency } from "./currency-api";
 
 interface UserState {
@@ -40,29 +37,6 @@ export const setupBotListeners = (bot: TelegramBot) => {
       setUserState(chatId, { state: "" });
     },
   };
-
-  // bot.on("message", async (msg) => {
-  //   if (!msg.text) return;
-  //   const userState = getUserState(msg.chat.id);
-  //   if (userState.state) {
-  //     const handler = stateHandlers[userState.state];
-  //     if (handler) {
-  //       await handler(msg);
-  //       return;
-  //     }
-  //   }
-  //   if (msg.text.startsWith("/")) {
-  //     const command = msg.text.split(" ")[0];
-  //     switch (command) {
-  //       case "/start":
-  //       case "/weather":
-  //         break;
-  //       default:
-  //         bot.sendMessage(msg.chat.id, "Please use a valid command.");
-  //         break;
-  //     }
-  //   }
-  // });
 
   const mainMenuKeyboard = {
     reply_markup: {
