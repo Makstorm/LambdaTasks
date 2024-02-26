@@ -99,7 +99,7 @@ export const setupBotListeners = (bot: TelegramBot) => {
     }
 
     switch (text) {
-      case "/Start":
+      case "/start":
         break;
       case "/Погода":
         break;
