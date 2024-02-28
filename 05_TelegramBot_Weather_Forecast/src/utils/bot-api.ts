@@ -75,12 +75,20 @@ export const setupBotListeners = (bot: TelegramBot) => {
 
   bot.onText(/\/Погода/, (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, "Меню", weatherForecastOptions);
+    bot.sendMessage(
+      chatId,
+      "Оберіть інтервал в якому показати прогноз:",
+      weatherForecastOptions
+    );
   });
 
   bot.onText(/\/Курс валют/, (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, "Меню", currencyOptions);
+    bot.sendMessage(
+      chatId,
+      "Оберіть валюту, курс якої бажаєте дізнатись",
+      currencyOptions
+    );
   });
 
   bot.on("message", async (msg) => {
