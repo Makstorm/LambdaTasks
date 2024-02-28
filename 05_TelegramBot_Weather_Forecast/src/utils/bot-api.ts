@@ -112,7 +112,6 @@ export const setupBotListeners = (bot: TelegramBot) => {
       case "/Погода":
         break;
       case "/Курс валют":
-        bot.sendMessage(chatId, "Оберіть валюту", currencyOptions);
         break;
       case "USD": {
         bot.sendMessage(chatId, await getCurrency(msg.text), mainMenuKeyboard);
