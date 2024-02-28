@@ -1,0 +1,28 @@
+{
+  "name": "07_CLI_Google_Uploader",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "nodemon",
+    "start:prod": "node dist/index.js"
+  },
+  "dependencies": {
+    "@types/node": "^20.11.20",
+    "axios": "^1.6.7",
+    "dotenv": "^16.4.5",
+    "google-auth-library": "^9.6.3",
+    "googleapis": "^133.0.0",
+    "inquirer": "^8.2.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
