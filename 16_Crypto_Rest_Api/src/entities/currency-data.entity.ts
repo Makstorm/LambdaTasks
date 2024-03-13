@@ -14,15 +14,39 @@ export class CurrencyDataEntity extends AbstractEntity {
   @Column({ name: "request_id" })
   public requestId: string;
 
-  @Column({ nullable: true })
+  @Column({ type: "float", nullable: true })
   public coinmarketcapPrice: number;
 
-  @Column({ nullable: true })
+  @Column({ type: "float", nullable: true })
   public coinbasePrice: number;
 
-  @Column({ nullable: true })
+  @Column({ type: "float", nullable: true })
   public kucoinPrice: number;
 
-  @Column({ nullable: true })
+  @Column({ type: "float", nullable: true })
   public coinpapricaPrice: number;
+
+  public getAverage(api = null): number {
+    let sum = 0;
+    let count = 0;
+
+    if (this.coinmarketcapPrice !== null) {
+      sum += this.coinmarketcapPrice;
+      count++;
+    }
+    if (this.coinbasePrice !== null) {
+      sum += this.coinbasePrice;
+      count++;
+    }
+    if (this.kucoinPrice !== null) {
+      sum += this.kucoinPrice;
+      count++;
+    }
+    if (this.coinpapricaPrice !== null) {
+      sum += this.coinpapricaPrice;
+      count++;
+    }
+
+    return api && this[api] ? this[api] : sum / count;
+  }
 }

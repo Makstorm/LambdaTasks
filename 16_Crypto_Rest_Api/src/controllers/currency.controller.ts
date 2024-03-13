@@ -22,7 +22,7 @@ export class CurrencyController implements Controller {
   constructor() {
     this.initializeRoutes();
 
-    this.scheduleCronJob();
+    // this.scheduleCronJob();
   }
 
   private initializeRoutes() {
@@ -153,81 +153,70 @@ export class CurrencyController implements Controller {
     res: express.Response,
     next: express.NextFunction
   ) {
-    const code = req.query.code as string;
-    const period = req.query.period as string;
-    const api = req.query.api as string;
-
-    if (!code) {
-      return res.status(400).send("Code query parameter is required");
-    }
+    const code = (req.query.code as string) || null;
+    const period = (req.query.period as string) || null;
+    const api = (req.query.api as string) || null;
 
     let entities: CurrenciesRequestEntity[];
 
     try {
-      let queryBuilder = this.currencyRequestRepository
+      let queryBuilder = await this.currencyRequestRepository
         .createQueryBuilder("request")
-        .leftJoinAndSelect(
-          "request.curensies",
-          "currency",
-          "currency.code = :code",
-          { code: code.trim().toLowerCase() }
-        )
+        .leftJoinAndSelect("request.curensies", "currency")
         .orderBy("request.createdAt", "DESC");
 
-      if (!period) {
-        entities = await queryBuilder.limit(1).getMany();
-      } else {
-        const fromTimestamp = this.getTimeBefore(period);
-        entities = await queryBuilder
-          .where("request.createdAt BETWEEN :fromTimestamp AND :now", {
-            fromTimestamp,
+      if (period) {
+        const timestamb = this.getTimeBefore(period);
+        queryBuilder = queryBuilder.where(
+          "request.createdAt BETWEEN :timestamb AND :now",
+          {
+            timestamb,
             now: new Date(),
-          })
-          .getMany();
+          }
+        );
       }
+
+      if (code) {
+        queryBuilder.andWhere("currency.code = :code", {
+          code: code.trim().toLowerCase(),
+        });
+      }
+
+      const entities = !period
+        ? await queryBuilder.getOne()
+        : await queryBuilder.getMany();
+
+      if (Array.isArray(entities)) {
+        res.json(
+          entities.map((entity) => {
+            return {
+              refreshRecordTime: entity.createdAt,
+              currenciesData: entity.curensies.map((curr) => {
+                return {
+                  currency: curr.code,
+                  price: curr.getAverage(api),
+                };
+              }),
+            };
+          })
+        );
+      } else {
+        res.json({
+          refreshRecordTime: entities.createdAt,
+          currenciesData: entities.curensies.map((curr) => {
+            return {
+              currency: curr.code,
+              price: curr.getAverage(api),
+            };
+          }),
+        });
+      }
+
+      res.json();
     } catch (error) {
       console.error("Error retrieving entities:", error);
       return res.status(500).send("Internal server error");
     }
-
-    const fields = api
-      ? [api]
-      : [
-          "coinmarketcapPrice",
-          "coinbasePrice",
-          "kucoinPrice",
-          "coinpapricaPrice",
-        ];
-
-    console.log(entities);
-
-    const result = entities.map((record) => {
-      return {
-        date: record.createdAt,
-        price: record.curensies.reduce((acc, curr) => {
-          let i = 0;
-          fields.forEach((key) => {
-            if (curr[key]) {
-              acc += curr[key];
-              i++;
-            }
-          });
-          return i === 0 ? acc : acc / i;
-        }, 0),
-      };
-    });
-
-    const filterRequst = result.filter((el) => el.price !== 0);
-
-    if (filterRequst.length === 0) {
-      res.send("There is no currency data from that marketplace");
-    }
-
-    res.json(
-      api
-        ? { title: api, data: filterRequst }
-        : { title: "Average price data", data: filterRequst }
-    );
   }
 
   private getTimeBefore(period: string): Date {
@@ -252,7 +241,7 @@ export class CurrencyController implements Controller {
   }
 
   private scheduleCronJob() {
-    cron.schedule("*/10 * * * * *'", async () => {
+    cron.schedule("*/5 * * * *", async () => {
       console.log("5 minuts refetch");
 
       await this.refreshData();
