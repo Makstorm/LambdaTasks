@@ -8,7 +8,7 @@ import {
 } from "./utils";
 
 const app = async () => {
-  const dirPath = path.join(__dirname, "data", "2kk_words_400x400"); // Для тустування на повному наборі даних необхідно замінити на 2kk_words_400x400
+  const dirPath = path.join(__dirname, "data", "2kk_words_400x400"); // Для тестування на повному наборі даних необхідно замінити на 2kk_words_400x400
   const pathsArray = await getFilePathArray(dirPath);
 
   console.time("startMeasureAll");
