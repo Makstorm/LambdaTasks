@@ -13,6 +13,8 @@ export const getFilePathArray = async (dirPath: string) => {
     }
   });
 
+  console.log("files", filePaths.length);
+
   return filePaths;
 };
 
