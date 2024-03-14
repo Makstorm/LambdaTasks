@@ -37,11 +37,11 @@ export class App {
 
     this.bot.help((ctx) =>
       ctx.reply(
-        "This is a Telegram bot. \nAvailable commands: \n/listRecent\n /listFavourite\n /addToFavourite {currency_symbol}\n /deleteFavourite {currency_symbol}"
+        "This is a Telegram bot. \nAvailable commands: \n/list_recent\n /list_favourite\n /add_to_favourite {currency_symbol}\n /delete_favourite {currency_symbol}\n /{currency_symbol}"
       )
     );
 
-    this.bot.command("listRecent", async (ctx) => {
+    this.bot.command("list_recent", async (ctx) => {
       const response = await axios.get<CurrenciesInfo>(
         "http://localhost:3000/currency"
       );
@@ -52,7 +52,7 @@ export class App {
       await ctx.reply(message);
     });
 
-    this.bot.command("addToFavourite", async (ctx) => {
+    this.bot.command("add_to_favourite", async (ctx) => {
       const symbol = ctx.message.text.split(" ")[1];
 
       if (!symbol) {
@@ -75,7 +75,7 @@ export class App {
       }
     });
 
-    this.bot.command("listFavourite", async (ctx) => {
+    this.bot.command("list_favourite", async (ctx) => {
       const telegramId = ctx.from.id;
 
       const user = await this.repositiry.findOne({ where: { telegramId } });
@@ -99,7 +99,7 @@ export class App {
       }
     });
 
-    this.bot.command("deleteFavourite", async (ctx) => {
+    this.bot.command("delete_favourite", async (ctx) => {
       const symbol = ctx.message.text.split(" ")[1];
       if (!symbol) {
         return ctx.reply("Please specify a cryptocurrency symbol.");
