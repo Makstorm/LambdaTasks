@@ -153,7 +153,7 @@ export class CurrencyController implements Controller {
     res: express.Response,
     next: express.NextFunction
   ) {
-    const code = (req.query.code as string) || null;
+    const code = (req.query.code as string | string[]) || null;
     const period = (req.query.period as string) || null;
     const api = (req.query.api as string) || null;
 
@@ -177,8 +177,10 @@ export class CurrencyController implements Controller {
       }
 
       if (code) {
-        queryBuilder.andWhere("currency.code = :code", {
-          code: code.trim().toLowerCase(),
+        queryBuilder.andWhere("currency.code IN (:...codes)", {
+          codes: Array.isArray(code)
+            ? code.map((c) => c.trim().toLowerCase())
+            : [code],
         });
       }
 
